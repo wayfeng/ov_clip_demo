@@ -3,12 +3,14 @@ from utils import load_clip_model, preprocess_image
 from build_index import load_embeddings, transforms
 import gradio as gr
 import numpy as np
+import os
 
-device = 'GPU'
-model_id = 'ViT-H-14'
-img_encoder_path = f"./models/{model_id.replace('-', '_').lower()}_visual.xml"
+model_id = os.environ.get('MODEL_ID') or 'ViT-H-14'
+#img_encoder_path = f"./models/{model_id.replace('-', '_').lower()}_visual.xml"
 txt_encoder_path = f"./models/{model_id.replace('-', '_').lower()}_text.xml"
-embeddings_path = "./vlm_small.pkl"
+device = os.environ.get('DEVICE') or 'GPU'
+embeddings_path = os.environ.get('EMBEDDINGS') or "./vlm_small.pkl"
+
 #_ienc, _tenc = load_clip_model(img_encoder_path, txt_encoder_path, device)
 _, tenc = load_clip_model(None, txt_encoder_path, device)
 
