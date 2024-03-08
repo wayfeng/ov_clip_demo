@@ -20,7 +20,7 @@ def preprocess_image(input_image, shape=[224,224]):
 def load_clip_model(img_encoder_path, txt_encoder_path, device='GPU', throughputmode=False):
     core = ov.Core()
     # force inferencing in f32 mode for bug in f16 mode
-    core.set_property(device, {hints.inference_precision: ov.Type.f32})
+    # core.set_property(device, {hints.inference_precision: ov.Type.f32})
     if throughputmode:
         core.set_property(device, {hints.performance_mode: hints.PerformanceMode.THROUGHPUT})
     ienc, tenc = None, None

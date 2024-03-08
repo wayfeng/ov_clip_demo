@@ -2,6 +2,6 @@ datasets
 faiss-cpu
 ftfy
 gradio
-openvino
+openvino==2024.0
 pillow
 regex
