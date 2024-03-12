@@ -1,4 +1,7 @@
 datasets
 faiss-cpu
+ftfy
+gradio
 openvino==2024.0
 pillow
+regex

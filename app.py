@@ -1,6 +1,7 @@
 from tokenizer import tokenize
 from utils import load_clip_model, preprocess_image
 from build_index import load_embeddings, transforms
+import argparse
 import gradio as gr
 import numpy as np
 import os
@@ -18,15 +19,15 @@ ds = load_embeddings(embeddings_path)
 index = ds.get_index('embedding')
 
 def query_images(text, k=4):
-    texts = text.split(',')
-    tokens = tokenize(texts)
+    #texts = text.split(',')
+    tokens = tokenize(text)
     text_features = tenc.infer_new_request(tokens)
     tfeat = text_features.to_tuple()[0]
     tfeat /= np.linalg.norm(tfeat, axis=1, keepdims=True)
     _, indices = index.search(tfeat, int(k))
     results = []
-    for i in indices:
-        results.append(ds[int(i)]['image'])
+    for i in map(int, indices):
+        results.append(ds[i]['image'])
     return results
 
 with gr.Blocks() as demo:
@@ -37,7 +38,9 @@ with gr.Blocks() as demo:
     gallery = gr.Gallery(label="results")
     btn.click(fn=query_images, inputs=[text, k], outputs=gallery)
 
-try:
-    demo.launch(debug=True)
-except Exception:
-    demo.launch(share=True, debug=True)
+
+if __name__ == '__main__':
+    try:
+        demo.launch(server_port=17580, debug=True)
+    except Exception:
+        demo.launch(server_port=17580, share=True, debug=True)
