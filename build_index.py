@@ -35,7 +35,7 @@ def main(device, image_path, image_model_path, embeddings_path):
         pickle.dump(embeddings, f, protocol=4)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser("OpenCLIP demo", add_help=True)
+    parser = argparse.ArgumentParser("OpenCLIP demo: build faiss index", add_help=True)
     parser.add_argument('-d', '--device', default='CPU', help='Device to inference')
     parser.add_argument('-i', '--image_path', default='images', help='Path to images')
     parser.add_argument('-m', '--image_model_path', default='models/vit_h_14_visual.xml', help='Path to image encoder model')
