@@ -10,10 +10,10 @@ def query_images(text, k=4):
     text_features = tenc.infer_new_request(tokens)
     tfeat = text_features.to_tuple()[0]
     tfeat /= np.linalg.norm(tfeat, axis=1, keepdims=True)
-    _, indices = index.search(tfeat, k)
+    scores, indices = index.search(tfeat, k)
     results = []
-    for i in map(int, indices):
-        results.append(ds[i]['image'])
+    for s, i in zip(scores, indices):
+        results.append((ds[int(i)]['image'], f"Score: {s:#.3f}"))
     return results
 
 if __name__ == '__main__':
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     txt_encoder_path = args.text_model_path
     embeddings_path = args.embeddings_path
     device = args.device
-    max_queries = args.max_queries
+    max_queries = int(args.max_queries)
 
     _, tenc = load_clip_model(None, txt_encoder_path, device)
     ds = load_embeddings(embeddings_path)
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     with gr.Blocks() as demo:
         with gr.Column():
             text = gr.Textbox(label="prompt")
-            k = gr.Slider(minimum=1, maximum=max_queries, step=1, label="output number")
+            k = gr.Slider(minimum=1, maximum=max_queries, value=max_queries//2, step=1, label="output number")
         btn = gr.Button("Query")
         gallery = gr.Gallery(label="results")
         btn.click(fn=query_images, inputs=[text, k], outputs=gallery)
