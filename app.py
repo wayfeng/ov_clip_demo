@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     with gr.Blocks() as demo:
         with gr.Row(equal_height=True):
-            lang = gr.Dropdown(choices=[x for x in languages.keys()], value='English', scale=0)
+            lang = gr.Dropdown(label="language", choices=[x for x in languages.keys()], value='English', scale=0)
             text = gr.Textbox(label="prompt", scale=1)
             #score = gr.Checkbox(value=False, scale=0)
         k = gr.Slider(minimum=1, maximum=max_queries, value=max_queries, step=1, label="output number")
